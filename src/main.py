@@ -9,7 +9,7 @@ workflow_collection = WorkflowCollection()
 @app.route('/', methods=['GET'])
 def get_all_workflows():
     workflows = workflow_collection.get_all_workflows()
-    return jsonify(workflows)
+    return jsonify({'data': workflows})
 
 @app.route('/', methods=['POST'])
 def add_workflow():
@@ -20,12 +20,13 @@ def add_workflow():
 @app.route('/<wid>', methods=['GET'])
 def get_one_workflow(wid):
     workflow = workflow_collection.get_one_workflow(wid)
-    return workflow
+    return jsonify({'data': workflow})
 
 
 @app.route('/<wid>', methods=['PUT'])
 def update_one_workflow(wid):
-    workflow_collection.update_one_workflow(wid)
+    body = request.get_json()
+    workflow_collection.update_one_workflow(wid, body)
     return 'Successfully updated document'
 
 @app.route('/<wid>', methods=['DELETE'])

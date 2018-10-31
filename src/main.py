@@ -6,16 +6,19 @@ app = Flask(__name__)
 
 workflow_collection = WorkflowCollection()
 
+
 @app.route('/', methods=['GET'])
 def get_all_workflows():
     workflows = workflow_collection.get_all_workflows()
     return jsonify({'data': workflows})
+
 
 @app.route('/', methods=['POST'])
 def add_workflow():
     workflow = request.get_json()
     workflow_collection.add_workflow(workflow)
     return 'Successfully inserted document'
+
 
 @app.route('/<wid>', methods=['GET'])
 def get_one_workflow(wid):
@@ -28,6 +31,7 @@ def update_one_workflow(wid):
     body = request.get_json()
     workflow_collection.update_one_workflow(wid, body)
     return 'Successfully updated document'
+
 
 @app.route('/<wid>', methods=['DELETE'])
 def delete_one_workflow(wid):

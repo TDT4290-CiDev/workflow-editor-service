@@ -27,8 +27,8 @@ class WorkflowCollection:
         return result
 
     def add_workflow(self, workflow):
-        self.workflow_collection.insert_one(workflow)
-        return True
+        wid = self.workflow_collection.insert_one(workflow).inserted_id
+        return str(wid)
 
     def update_one_workflow(self, wid, updates={}):
         updates = {'$set': updates}

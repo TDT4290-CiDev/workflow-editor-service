@@ -17,8 +17,8 @@ def get_all_workflows():
 @app.route('/', methods=['POST'])
 def add_workflow():
     workflow = request.get_json()
-    workflow_collection.add_workflow(workflow)
-    return 'Successfully inserted document', HTTPStatus.CREATED
+    wid = workflow_collection.add_workflow(workflow)
+    return wid, HTTPStatus.CREATED
 
 
 @app.route('/<wid>', methods=['GET'])

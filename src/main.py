@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from workflow_collection import WorkflowCollection
+from http import HTTPStatus
 
 
 app = Flask(__name__)
@@ -17,7 +18,7 @@ def get_all_workflows():
 def add_workflow():
     workflow = request.get_json()
     workflow_collection.add_workflow(workflow)
-    return 'Successfully inserted document'
+    return 'Successfully inserted document', HTTPStatus.CREATED
 
 
 @app.route('/<wid>', methods=['GET'])
@@ -37,9 +38,9 @@ def update_one_workflow(wid):
 def delete_one_workflow(wid):
     successfully_deleted = workflow_collection.delete_one_workflow(wid)
     if successfully_deleted:
-        return '', 204
+        return '', HTTPStatus.NO_CONTENT
     else:
-        return 'Workflow with id %d does not exist', 404
+        return 'Workflow with id %d does not exist', HTTPStatus.NOT_FOUND
 
 
 # Only for testing purposes - should use WSGI server in production

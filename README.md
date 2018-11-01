@@ -23,7 +23,7 @@ A workflow is defined in JSON with the following format:
 		},
 		"2": {
 			"type": "branch",
-			"condition": ["{outputs.response}", "=", true],
+			"condition": "'{outputs.response}' == 'mail_sent'",
 			"next_block": [
 				3, 4
 			]

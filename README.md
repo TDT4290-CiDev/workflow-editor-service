@@ -19,13 +19,13 @@ A workflow is defined in JSON with the following format:
 				"body": "This is a test mail."
 			},
 			"save_outputs": {},
-			"next_block": 2
+			"next_block": "2"
 		},
 		"2": {
 			"type": "branch",
 			"condition": "'{outputs.response}' == 'mail_sent'",
 			"next_block": [
-				3, 4
+				"3", "4"
 			]
 		},
 		"3": {
@@ -38,7 +38,7 @@ A workflow is defined in JSON with the following format:
 			"save_outputs": {
 				"first_name": "user.first_name"
 			},
-			"next_block": -1
+			"next_block": "-1"
 		},
 		"4": {
 			"type": "action",
@@ -47,7 +47,7 @@ A workflow is defined in JSON with the following format:
 				"content": "This is a Twitter post by {store.user.first_name}"
 			},
 			"save_outputs": [],
-			"next_block": -1
+			"next_block": "-1"
 		}
 	},
 	"inputs": {

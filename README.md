@@ -8,7 +8,7 @@ A workflow is defined in JSON with the following format:
 
 ```json
 {
-	"start_block": 1,
+	"start_block": "1",
 	"blocks": {
 		"1": {
 			"type": "action",

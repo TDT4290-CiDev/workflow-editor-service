@@ -23,24 +23,29 @@ def add_workflow():
 
 @app.route('/<wid>', methods=['GET'])
 def get_one_workflow(wid):
-    workflow = workflow_collection.get_one_workflow(wid)
-    return jsonify({'data': workflow})
+    try:
+        workflow = workflow_collection.get_one_workflow(wid)
+        return jsonify({'data': workflow})
+    except ValueError:
+        return 'Workflow with id {} does not exist'.format(wid), HTTPStatus.NOT_FOUND
 
 
 @app.route('/<wid>', methods=['PUT'])
 def update_one_workflow(wid):
-    body = request.get_json()
-    workflow_collection.update_one_workflow(wid, body)
-    return 'Successfully updated document'
-
+    try:
+        body = request.get_json()
+        workflow_collection.update_one_workflow(wid, body)
+        return '', HTTPStatus.NO_CONTENT
+    except ValueError:
+        return 'Workflow with id {} does not exist'.format(wid), HTTPStatus.NOT_FOUND
 
 @app.route('/<wid>', methods=['DELETE'])
 def delete_one_workflow(wid):
-    successfully_deleted = workflow_collection.delete_one_workflow(wid)
-    if successfully_deleted:
+    try:
+        workflow_collection.delete_one_workflow(wid)
         return '', HTTPStatus.NO_CONTENT
-    else:
-        return 'Workflow with id %d does not exist', HTTPStatus.NOT_FOUND
+    except ValueError:
+        return 'Workflow with id {} does not exist'.format(wid), HTTPStatus.NOT_FOUND
 
 
 # Only for testing purposes - should use WSGI server in production

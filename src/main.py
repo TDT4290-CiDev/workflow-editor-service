@@ -26,8 +26,8 @@ def get_one_workflow(wid):
     try:
         workflow = workflow_collection.get_one_workflow(wid)
         return jsonify({'data': workflow})
-    except ValueError:
-        return 'Workflow with id {} does not exist'.format(wid), HTTPStatus.NOT_FOUND
+    except ValueError as e:
+        return str(e), HTTPStatus.NOT_FOUND
 
 
 @app.route('/<wid>', methods=['PUT'])
@@ -36,16 +36,16 @@ def update_one_workflow(wid):
         body = request.get_json()
         workflow_collection.update_one_workflow(wid, body)
         return '', HTTPStatus.NO_CONTENT
-    except ValueError:
-        return 'Workflow with id {} does not exist'.format(wid), HTTPStatus.NOT_FOUND
+    except ValueError as e:
+        return str(e), HTTPStatus.NOT_FOUND
 
 @app.route('/<wid>', methods=['DELETE'])
 def delete_one_workflow(wid):
     try:
         workflow_collection.delete_one_workflow(wid)
         return '', HTTPStatus.NO_CONTENT
-    except ValueError:
-        return 'Workflow with id {} does not exist'.format(wid), HTTPStatus.NOT_FOUND
+    except ValueError as e:
+        return str(e), HTTPStatus.NOT_FOUND
 
 
 # Only for testing purposes - should use WSGI server in production

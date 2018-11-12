@@ -4,13 +4,14 @@ from bson.errors import InvalidId
 
 access_url = 'workflow-editor-datastore:27017'
 
-def is_valid_object_id(obj_id):
-    try:
-        wid = ObjectId(obj_id)
-        return True
-    except InvalidId:
-        return False
 
+def catch_invalid_id(form_operator):
+    def catch_wrapper(*args):
+        try:
+            return form_operator(*args)
+        except InvalidId:
+            raise ValueError('{} is not a valid ID. '.format(args[1]))
+    return catch_wrapper
 
 
 class WorkflowCollection:
@@ -20,12 +21,11 @@ class WorkflowCollection:
         self.db = self.client.cidev_db
         self.workflow_collection = self.db.workflow_collection
 
+    @catch_invalid_id
     def get_one_workflow(self, wid):
-        if not is_valid_object_id(wid):
-            raise ValueError
         workflow = self.workflow_collection.find_one(ObjectId(wid))
         if not workflow:
-            raise ValueError
+            raise ValueError('Workflow with ID {} does not exist.'.format(wid))
         workflow['_id'] = str(workflow['_id'])
         return workflow
 
@@ -41,21 +41,18 @@ class WorkflowCollection:
         wid = self.workflow_collection.insert_one(workflow).inserted_id
         return str(wid)
 
+    @catch_invalid_id
     def update_one_workflow(self, wid, updates):
-        if not is_valid_object_id(wid):
-            raise ValueError
-
         updates = {'$set': updates}
         update_res = self.workflow_collection.update_one({'_id': ObjectId(wid)}, updates)
         if update_res.matched_count == 0:
-            raise ValueError
+            raise ValueError('Workflow with ID {} does not exist.'.format(wid))
 
+    @catch_invalid_id
     def delete_one_workflow(self, wid):
-        if not is_valid_object_id(wid):
-            raise ValueError
         del_res = self.workflow_collection.delete_one({'_id': ObjectId(wid)})
         if del_res.deleted_count == 0:
-            raise ValueError
+            raise ValueError('Workflow with ID {} does not exist.'.format(wid))
 
 
     def delete_all_workflows(self):

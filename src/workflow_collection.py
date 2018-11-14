@@ -1,8 +1,6 @@
-from pymongo import MongoClient
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
 
-access_url = 'workflow-editor-datastore:27017'
 
 
 def catch_invalid_id(form_operator):
@@ -16,8 +14,8 @@ def catch_invalid_id(form_operator):
 
 class WorkflowCollection:
 
-    def __init__(self):
-        self.client = MongoClient(access_url)
+    def __init__(self, client):
+        self.client = client
         self.db = self.client.cidev_db
         self.workflow_collection = self.db.workflow_collection
 

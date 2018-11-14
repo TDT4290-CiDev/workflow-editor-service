@@ -1,11 +1,15 @@
-from flask import Flask, jsonify, request
-from workflow_collection import WorkflowCollection
 from http import HTTPStatus
+from flask import Flask, jsonify, request
+from pymongo import MongoClient
+
+from workflow_collection import WorkflowCollection
 
 
 app = Flask(__name__)
 
-workflow_collection = WorkflowCollection()
+access_url = 'workflow-editor-datastore:27017'
+
+workflow_collection = WorkflowCollection(MongoClient(access_url))
 
 
 @app.route('/', methods=['GET'])
